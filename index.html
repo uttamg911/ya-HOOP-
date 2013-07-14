@@ -1,0 +1,103 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ya"HOOP"</title>
+	<script src="paper.js"></script>
+
+	<script type="text/javascript">
+	var totalA = 0;
+        var totalO = 0;
+				function edValueKeyPress()
+    {
+        var edValue = document.getElementById("edValue");
+        var s = edValue.value;
+    
+        var lblValue = document.getElementById("lblValue");
+ 
+        for( var i=0; i<s.length; i++ ){
+           if( s.charAt(i) === "a" || s.charAt(i) === "A") {
+            totalA++;
+            } 
+          if( s.charAt(i) === "o" || s.charAt(i) === "O" ){
+            totalO++;
+            }
+        }
+        console.log(totalA,totalO)
+    }
+	</script>
+
+
+	<script type="text/paperscript" canvas="court">		
+
+
+		var cPath = new Path.Ellipse(new Point(600,300), 90, 40);
+		cPath.strokeColor = "#AAAAAA";
+
+		var circle = new Path.Circle(new Point(80, 50), 30);
+		circle.fillColor = "green";
+
+		var scoreText = new PointText({
+			point: (200,200),
+			justification: 'center',
+			fontSize: 30,
+			fillColor: 'green'
+		});
+
+		var score = 0;
+		var t = 0;
+		var uZero = 50; // in pixels / sec?
+		var thetaZero = (0.7); //in radians
+
+
+		var found = false;
+		var updateScore = false;
+		var once = 0;
+
+		function onFrame(event){ 
+			if (!found) {
+				launchProjectile(uZero, thetaZero);
+				scoreText.content = score.toString();
+			}
+	
+			if (cPath.contains(circle.position.x,circle.position.y)) {
+				once = once + 1;
+				updateScore = true;
+				if (updateScore && once === 1) {
+					score = score + 6;
+					updateScore = false;
+			}
+				found = true;
+				return;
+			}	
+	
+			if (circle.position.x > view.center.x*2 || circle.position.y > view.center.y*2){
+	  			found = true;
+	  			return;
+			}
+		}
+
+		function launchProjectile(u,theta){
+			circle.position.x = 300 + u*Math.cos(theta)*t;
+			circle.position.y = 200 - u*Math.sin(theta)*t + (5*Math.pow(t,2));
+			t = t + 0.1;
+		}
+
+		function onMouseDown(event) {
+			circle.position = new Point(300,200);
+			uZero = 10 + ( totalA/10 * 41); //totalA = 5
+			thetaZero = 0.5 + totalO/50; //total0 = 5
+			t = 0;
+			found = false;
+			updateScore = false;
+			once = 0;
+		}
+
+	</script>
+</head>
+<body style="width:auto; height: auto; position: relative">
+	<!--<input style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" value="yahooooo"/>-->
+	<input id="edValue" style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" onKeyPress="edValueKeyPress()" onKeyUp="edValueKeyPress()"/>
+	<canvas id="court" style="width: 700px; height: 500px; border: 1px solid #AAA; background:url('drawing.png'); background-repeat: no-repeat; background-size: 700px 500px; position: relative;"></canvas>
+	<!--<canvas id="court" style="width:700px; height: 500px; border:1px solid #AAA"></canvas>-->
+</body>
+</html>
