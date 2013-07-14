@@ -1,0 +1,62 @@
+﻿
+var cPath = new Path.Ellipse(new Point(600,300), 90, 40);
+cPath.strokeColor = "#AAAAAA";
+
+var circle = new Path.Circle(new Point(80, 50), 30);
+circle.fillColor = "green";
+
+var scoreText = new PointText({
+	point: (200,200),
+	justification: 'center',
+	fontSize: 30,
+	fillColor: 'green'
+});
+
+var score = 0;
+var t = 0;
+var uZero = 50; // in pixels / sec?
+var thetaZero = (0.7); //in radians
+
+
+var found = false;
+var updateScore = false;
+var once = 0;
+
+function onFrame(event){ 
+	if (!found) {
+		launchProjectile(uZero, thetaZero);
+		scoreText.content = score.toString();
+	}
+	
+	if (cPath.contains(circle.position.x,circle.position.y)) {
+		once = once + 1;
+		updateScore = true;
+		if (updateScore && once === 1) {
+			score = score + 6;
+			updateScore = false;
+		}
+		found = true;
+		return;
+	}
+	
+	if (circle.position.x > view.center.x*2 || circle.position.y > view.center.y*2){
+	  found = true;
+	  return;
+	}
+}
+
+function launchProjectile(u,theta){
+	circle.position.x = 300 + u*Math.cos(theta)*t;
+	circle.position.y = 200 - u*Math.sin(theta)*t + (5*Math.pow(t,2));
+	t = t + 0.1;
+}
+
+function onMouseDown(event) {
+	circle.position = new Point(300,200);
+	uZero = 30 + (Math.random() * 41);
+	thetaZero = 0.5 + Math.random();
+	t = 0;
+	found = false;
+	updateScore = false;
+	once = 0;
+}

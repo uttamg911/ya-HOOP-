@@ -7,23 +7,22 @@
 	<script type="text/javascript">
 	var totalA = 0;
         var totalO = 0;
-				function edValueKeyPress()
-    {
-        var edValue = document.getElementById("edValue");
-        var s = edValue.value;
-    
-        var lblValue = document.getElementById("lblValue");
+	function edValueKeyPress(){
+        	var edValue = document.getElementById("edValue");
+        	var s = edValue.value;
+    		
+		var lblValue = document.getElementById("lblValue");
  
-        for( var i=0; i<s.length; i++ ){
-           if( s.charAt(i) === "a" || s.charAt(i) === "A") {
-            totalA++;
-            } 
-          if( s.charAt(i) === "o" || s.charAt(i) === "O" ){
-            totalO++;
-            }
+ 		for( var i=0; i<s.length; i++ ){
+		if( s.charAt(i) === "a") {
+			totalA++;
+            	} 
+		if( s.charAt(i) === "o"){
+			totalO++;
+		}
         }
-        console.log(totalA,totalO)
-    }
+        	console.log(totalA,totalO)
+	}
 	</script>
 
 
@@ -58,8 +57,6 @@
 		var found = false;
 		var updateScore = false;
 		var once = 0;
-		var ranX = 600 + Math.random()*11;
-		var ranY = 300 + Math.random()*11;
 		function onFrame(event){ 
 			if (!found) {
 				launchProjectile(uZero, thetaZero);
@@ -84,23 +81,30 @@
 		}
 
 		function launchProjectile(u,theta){
+			circle.rotate(5);
 			circle.position.x = 300 + u*Math.cos(theta)*t;
 			circle.position.y = 200 - u*Math.sin(theta)*t + (5*Math.pow(t,2));
 			t = t + 0.1;
 		}
 
 		function onMouseDown(event) {
+			edValueKeyPress();
 			circle.position = new Point(300,200);
-			
-			cPath.position = new Point()
-			if (totalA > 5 ) { totalA = 15; }
-			if (totalO > 5 ) { totalO = 5; }
-			uZero = totalA/10 * 30; //totalA = 5
-			thetaZero = totalO/10; //total0 = 5
+			var ranX = 600 + Math.random()*200;
+			if (ranX > 700) { ranX = 700;} 
+			var ranY = 300 + Math.random()*200;
+			if (ranY > 500 ) { ranY = 500;}
+			cPath.position = new Point(ranX,ranY);
+			//if (totalA > 5 ) { totalA = 15; }
+			//if (totalO > 5 ) { totalO = 5; }
+			uZero = 30 + totalA/10 * 10; //totalA = 5
+			thetaZero = 0.5 + totalO/10 * 0.1; //total0 = 5
 			t = 0;
 			found = false;
 			updateScore = false;
 			once = 0;
+			totalA = 0;
+			totalO = 0;
 		}
 
 	</script>
@@ -109,7 +113,7 @@
 	<img id="ball" src="ball.png" style="display:none"/>
 	<img id="basket" src="basket-full.png" style="display:none"/>
 	<!--<input style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" value="yahooooo"/>-->
-	<input id="edValue" style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" onKeyPress="edValueKeyPress()" onKeyUp="edValueKeyPress()"/>
+	<input id="edValue" style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" />
 	<canvas id="court" style="width: 700px; height: 500px; border: 1px solid #AAA; background:url('drawing.png'); background-repeat: no-repeat; background-size: 700px 500px; position: relative;"></canvas>
 	<!--<canvas id="court" style="width:700px; height: 500px; border:1px solid #AAA"></canvas>-->
 </body>
