@@ -30,17 +30,23 @@
 	<script type="text/paperscript" canvas="court">		
 
 
-		var cPath = new Path.Ellipse(new Point(600,300), 90, 40);
-		cPath.strokeColor = "#AAAAAA";
+		//var cPath = new Path.Ellipse(new Point(600,300), 90, 40);
+		//cPath.strokeColor = "black";
+		//cPath.strokeWidth = 2;
+		
+		var cPath = new Raster('basket');
+		cPath.scale(0.5);
+		cPath.position.x = 600;
+		cPath.position.y = 300;
 
-		var circle = new Path.Circle(new Point(80, 50), 30);
-		circle.fillColor = "green";
+		var circle = new Raster('ball');
+		circle.scale(0.6);
 
 		var scoreText = new PointText({
-			point: (200,200),
+			point: (400,70),
 			justification: 'center',
-			fontSize: 30,
-			fillColor: 'green'
+			fontSize: 40,
+			fillColor: 'purple'
 		});
 
 		var score = 0;
@@ -52,7 +58,8 @@
 		var found = false;
 		var updateScore = false;
 		var once = 0;
-
+		var ranX = 600 + Math.random()*11;
+		var ranY = 300 + Math.random()*11;
 		function onFrame(event){ 
 			if (!found) {
 				launchProjectile(uZero, thetaZero);
@@ -84,8 +91,12 @@
 
 		function onMouseDown(event) {
 			circle.position = new Point(300,200);
-			uZero = 10 + ( totalA/10 * 41); //totalA = 5
-			thetaZero = 0.5 + totalO/50; //total0 = 5
+			
+			cPath.position = new Point()
+			if (totalA > 5 ) { totalA = 15; }
+			if (totalO > 5 ) { totalO = 5; }
+			uZero = totalA/10 * 30; //totalA = 5
+			thetaZero = totalO/10; //total0 = 5
 			t = 0;
 			found = false;
 			updateScore = false;
@@ -95,6 +106,8 @@
 	</script>
 </head>
 <body style="width:auto; height: auto; position: relative">
+	<img id="ball" src="ball.png" style="display:none"/>
+	<img id="basket" src="basket-full.png" style="display:none"/>
 	<!--<input style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" value="yahooooo"/>-->
 	<input id="edValue" style="position:fixed; font-size: 18px; font-family: sans-serif; left:100px; top: 50px; z-index: 50" type="text" onKeyPress="edValueKeyPress()" onKeyUp="edValueKeyPress()"/>
 	<canvas id="court" style="width: 700px; height: 500px; border: 1px solid #AAA; background:url('drawing.png'); background-repeat: no-repeat; background-size: 700px 500px; position: relative;"></canvas>
